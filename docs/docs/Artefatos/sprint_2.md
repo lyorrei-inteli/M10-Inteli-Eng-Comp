@@ -1,5 +1,12 @@
 # Artefatos Sprint 2
 
+:::danger[ATUALIZAÇÃO A CAMINHO]
+Os artefatos aqui ainda podem sofrem alguma alteração!! Vocês serão notificados em caso de mudanças.
+
+<img class="image-intro" src="https://media.tenor.com/HWpdsFjFrDoAAAAM/i-hate-water.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto' }}/>
+
+:::
+
 ## 1. Artefato de Computação: Implementação Inicial do Backend
 
 Espera-se com este artefato que os estudantes possam realizar a implementação da proposta inicial do backend proposto, em conjunto com o início do processo de testes do projeto. Não existe a obrigatoriedade da utilização de alguma linguagem específica para realizar esta implementação, recomenda-se que sejam utilizadas as ferramentas e frameworks apresentados ao longo dos encontros de instrução.

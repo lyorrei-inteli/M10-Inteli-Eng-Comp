@@ -1,5 +1,12 @@
 # Artefatos Sprint 4
 
+:::danger[ATUALIZAÇÃO A CAMINHO]
+Os artefatos aqui ainda podem sofrem alguma alteração!! Vocês serão notificados em caso de mudanças.
+
+<img class="image-intro" src="https://media.tenor.com/HWpdsFjFrDoAAAAM/i-hate-water.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto' }}/>
+
+:::
+
 ## 1. Artefato de Computação: Integração Mobile e Backend
 
 Espera-se com esse artefato que os estudantes possam finalizar a implementação da integração entre a solução mobile desenvolvida e o backend da solução. Eventuais problemas de desempenho ou ainda problemas de integração possam ser apresentados, estudados e soluções para eles possam ser implementadas.

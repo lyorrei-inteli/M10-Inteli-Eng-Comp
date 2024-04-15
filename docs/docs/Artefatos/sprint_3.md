@@ -1,5 +1,12 @@
 # Artefatos Sprint 3
 
+:::danger[ATUALIZAÇÃO A CAMINHO]
+Os artefatos aqui ainda podem sofrem alguma alteração!! Vocês serão notificados em caso de mudanças.
+
+<img class="image-intro" src="https://media.tenor.com/HWpdsFjFrDoAAAAM/i-hate-water.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto' }}/>
+
+:::
+
 ## 1. Artefato de Computação: Implementação do Aplicativo Mobile e Backend com considerações de escalabilidade e segurança
 
 Desenvolvimento da aplicação mobile como definido no artefato de prototipação. Implementação da solução já com as funcionalidades principais do sistema. O aplicativo deve ser possível de ser executado em um dispositivo Android (real ou virtual). 

@@ -1,5 +1,12 @@
 # Artefatos Sprint 5
 
+:::danger[ATUALIZAÇÃO A CAMINHO]
+Os artefatos aqui ainda podem sofrem alguma alteração!! Vocês serão notificados em caso de mudanças.
+
+<img class="image-intro" src="https://media.tenor.com/HWpdsFjFrDoAAAAM/i-hate-water.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto' }}/>
+
+:::
+
 ## 1. Artefato de Computação: Finalização da solução, realizando as validações finais
 
 Documentação do processo de evolução, comparando os testes de carga para justificar as escolhas realizadas e finalizando a documentação do projeto final.	
