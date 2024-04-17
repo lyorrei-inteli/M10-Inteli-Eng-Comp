@@ -3,13 +3,13 @@ sidebar_position: 3
 title: Maturidade de Richardson
 ---
 
-# 1.Modelo de Maturidade de Richardson
+## 1.Modelo de Maturidade de Richardson
 
 O Modelo de Maturidade de Richardson é uma ferramenta útil para avaliar a conformidade de uma API com os princípios REST. Desenvolvido por Leonard Richardson, este modelo decompõe os elementos cruciais que definem uma API RESTful em quatro níveis de maturidade. Cada nível adiciona novos elementos sobre os anteriores, aumentando a aderência aos princípios REST. A ideia é que, ao seguir este modelo, desenvolvedores possam criar serviços web mais robustos, escaláveis e flexíveis.
 
-# 2.Níveis do Modelo
+## 2.Níveis do Modelo
 
-## 2.1.Nível 0: POX (Plain Old XML)
+### 2.1.Nível 0: POX (Plain Old XML)
 
 O HTTP é utilizado apenas como meio de transporte. Neste nível, a API é basicamente apenas um mecanismo remoto de chamada de procedimento (RPC). Ou seja, não aproveita as características inerentes do protocolo HTTP além de simplesmente enviar e receber dados.
 
@@ -25,7 +25,7 @@ A API neste nível geralmente expõe apenas um único URI que recebe todas as re
 
 :::
 
-## 2.2.Nível 1: Recursos
+### 2.2.Nível 1: Recursos
 
 No nível 1, o sistema começa a definir recursos com URIs dedicadas. Por exemplo, separando `/clientes` para acessos relacionados a clientes e `/pedidos` para pedidos. 
 
@@ -41,7 +41,7 @@ Geralmente, ainda usa POST para todas as operações, não diferenciando entre t
 
 :::
 
-## 2.3.Nível 2: Verbos HTTP
+### 2.3.Nível 2: Verbos HTTP
 
 Este nível utiliza os verbos HTTP (GET, POST, PUT, DELETE) para definir ações sobre os recursos, alinhando melhor com os princípios REST. Em geral temos como operações padrão:
 - `GET` para recuperar recursos.
@@ -64,3 +64,32 @@ Este nível também utiliza códigos de status HTTP para comunicar o resultado d
 
 :::
 
+### 2.4.Nível 3: HATEOAS (Hypermedia as the Engine of Application State)
+
+O último nível adiciona controles de hypermedia, que incluem links dentro das respostas que orientam o cliente sobre as ações possíveis subsequentes.
+
+As respostas são auto-descritivas, com links para métodos relacionados (por exemplo, link para deletar um cliente na representação de um cliente). A aplicação do cliente muda de estado exclusivamente através das hyperlinks fornecidos dinamicamente pela aplicação do servidor.
+
+Por exemplo, uma resposta para `GET /clientes/123` poderia incluir links para `PUT /clientes/123` e `DELETE /clientes/123`, e talvez links para recursos relacionados como `/clientes/123/pedidos`.
+
+:::info[Qual a relevância?]
+
+- `Descoberta Dinâmica:` Permite que os clientes da API descubram dinamicamente outras funcionalidades da API, reduzindo o acoplamento entre cliente e servidor e melhorando a escalabilidade e a flexibilidade da aplicação.
+
+- `Verdadeiramente RESTful:` Alcançar este nível significa que a API é totalmente RESTful, aproveitando todos os benefícios do protocolo HTTP e seguindo os princípios de design REST de maneira completa.
+
+:::
+
+Sugestão de Material Complementar (créditos ao [rmnicola](https://github.com/rmnicola) por ter sugerido o vídeo):
+
+<iframe width="600" height="480" max-width="80vw" src="https://www.youtube.com/embed/x7v6SNIgJpE?si=whTCgt28o5i5nqdY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style={{display: 'block', marginLeft: 'auto', maxHeight: '80vh', marginRight: 'auto', marginBottom: '16px'}}></iframe>
+
+## 3. Considerações sobre o uso do Modelo
+
+Este modelo não só ajuda a construir APIs que verdadeiramente aproveitam a arquitetura da Web mas também promove práticas que podem aumentar a flexibilidade, escalabilidade e a manutenibilidade da aplicação. APIs que alcançam o Nível 3 são consideradas verdadeiramente RESTful, pois utilizam a web (com seus hyperlinks e métodos HTTP) como plataforma de desenvolvimento de aplicações.
+
+Ao projetar APIs RESTful, atingir o Nível 3 do Modelo de Maturidade de Richardson significa que a API está bem equipada para evoluir. Links e ações sugeridas nas respostas permitem que o cliente de API descubra dinamicamente outras ações possíveis, reduzindo o acoplamento entre cliente e servidor e facilitando mudanças e expansões futuras.
+
+A aplicação desses princípios ajuda a garantir que a API pode ser usada de maneira intuitiva e eficaz, aproveitando plenamente os protocolos web existentes e a infraestrutura de internet. Em resumo, o Modelo de Maturidade de Richardson fornece um caminho claro para a evolução técnica das APIs.
+
+Contudo, cabe destacar que o Modelo de Maturidade de Richardson é uma ferramenta útil para avaliar o quão bem uma API segue os princípios REST. No entanto, é importante lembrar que a aderência estrita a todos os níveis do modelo pode não ser necessária ou prática em todos os casos. A aplicação do modelo deve ser feita de forma consciente, considerando as necessidades e restrições específicas de cada projeto.
