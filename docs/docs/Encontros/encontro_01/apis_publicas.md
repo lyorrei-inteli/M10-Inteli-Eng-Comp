@@ -138,7 +138,7 @@ Vamos agora criar uma nova requisição para a URL `{{baseUrl}}/{{deck_id}}/retu
 
 Pessoal esse é o básico para utilizarmos o Insomnia. Vamos agora fazer a atividade de estudar as APIs públicas 🐼.
 
-Para mais informações sobre o Insomnia, acesse a [documentação oficial](https://support.insomnia.rest/).
+Para mais informações sobre o Insomnia, acesse a [documentação oficial](https://support.insomnia.rest/). E lembrem-se, por mais que tenhamos vistos estes conceitos para o Insomina, eles são quase que diretamente aplicáveis para outros clientes REST, como o Postman.
 
 ### APIs para Estudo
 
