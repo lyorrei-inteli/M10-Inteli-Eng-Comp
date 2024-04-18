@@ -28,6 +28,7 @@ Primeiro vamos fazer o download do Insomnia, para isso acesse o site oficial do 
 
 <iframe width="600" height="480" max-width="80vw" src="https://www.youtube.com/embed/6Jch0cKz6hE?si=Ips0DV0SZMrteRgl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style={{display: 'block', marginLeft: 'auto', maxHeight: '80vh', marginRight: 'auto', marginBottom: '16px'}}></iframe>
 
+<iframe width="600" height="480" max-width="80vw" src="https://www.youtube.com/embed/a7X3ZIdtbNc?si=1gsv7-o5FGTIsg7u" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style={{display: 'block', marginLeft: 'auto', maxHeight: '80vh', marginRight: 'auto', marginBottom: '16px'}}></iframe>
 
 
 </details>
@@ -106,6 +107,49 @@ Agora vamos utilizar essa variável para fazer uma nova requisição. Clique no 
 
 <img src={useBaseUrl("/img/insomnia/utilizando-base-url.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
 
-Agora, vamos vincular essa requisição com uma variável de ambiente, para conseguir guardar 
+Agora, vamos vincular essa requisição com uma variável de ambiente, para conseguir guardar o resultado vindo da requisição. Para isso, vamos dar um nome para nossa requisição anterior, clicar duas vezes no nome `New Request` e alterar ele para `pede novo baralho`.
+
+Agora vamos criar a variável que vai receber o valor do `deck_id` que é retornado na requisição. Para isso, vamos criar uma outra variável de ambiente, clicando no botão `+` ao lado de `deck_id` e inserindo o valor `""`.
+
+```json
+{
+	"baseUrl":"https://deckofcardsapi.com/api/deck",
+	"deck_id":""
+}
+```
+
+Agora vamos configurar que o valor de retorno da requisição possa ser atribuído a ela. Para isso, vamos editar o conteúdo de `deck_id`, vamos iniciar adicionando o valor `response`, para selecionarmos a opção `Response - Body Atribute`.
+
+<img src={useBaseUrl("/img/insomnia/editando_resposta.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Ao confirmarmos, vamos ter uma indicação de erro, que o valor do atributo da resposta ainda não foi selecionado. Para isso, vamos clicar no elemento `response` e vamos configurar ele.
+
+<img src={useBaseUrl("/img/insomnia/edicao_da_resposta.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Ao clicar nele, a tela do editor de Tags será aberta. Agora, em `Request`, vamos selecionar a requisição que queremos pegar o valor, que é a `pede novo baralho`. Em `Filter (JSONPath or XPath)` vamos configurar que desejamos acessar. Vamos iniciar com `$`, que é o início do JSON, e vamos acessar o atributo `deck_id`, que é o valor que queremos pegar. Logo ao colocar o `$`, o Insomnia já nos mostra as opções disponíveis para acessar. Acessamos os campos internos utilizando o operador `.`. Portanto, para acessar o `deck_id`, vamos utilizar `$.deck_id`.	
+
+Agora o `Trigger Behavior` é o comportamento que o Insomnia vai ter ao pegar o valor. Quando deixamos ele em `Never - never resend request`, estamos dependendo da requisição anterior ter sido realizada e então podemos utilizar o valor. Se alterarmos para `Always - resend request when needed`, a requisição será realizada quando não existir um valor para o atribuito. Vamos deixar em `Never`.
+
+<img src={useBaseUrl("/img/insomnia/configurando-editor-tag.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Vamos agora criar uma nova requisição para a URL `{{baseUrl}}/{{deck_id}}/return/`. Para isso, clique no botão `+` ao lado de `Filter` e selecione `HTTP Request`. Ajuste o nome da requisição para `verifica baralho`. Repare que o Insomnia já traz um preview de como fica a URL de acordo com as variáveis de ambiente.
+
+<img src={useBaseUrl("/img/insomnia/criando-nova-requisicao.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Pessoal esse é o básico para utilizarmos o Insomnia. Vamos agora fazer a atividade de estudar as APIs públicas 🐼.
+
+Para mais informações sobre o Insomnia, acesse a [documentação oficial](https://support.insomnia.rest/).
 
 ### APIs para Estudo
+
+Dentro do repositório (`public-apis`)[https://github.com/public-apis/public-apis] do Github, é possível ver uma série de APIs públicas que podem ser utilizadas para estudo. Vamos escolher algumas APIs para estudar e identificar os pilares REST presentes nelas.
+
+Cada equipe deve escolher uma ou duas APIs para estudar. A ideia é que, ao final, tenhamos uma boa quantidade de APIs estudadas e os pilares REST identificados em cada uma delas.
+
+Exportem a Collection que vocês criarem para fazer o teste das APIs escolhuidas, junto com um arquivo Markdown que descreve as observações de vocês quanto cada API.
+
+:::danger[ESSA NÃO É UMA ATIVIDADE AVALIATIVA]
+
+O objetivo desta atividade é realizar a identificação dos pilares REST em APIs públicas. A atividade não será avaliada, mas é importante que todos participem para que possamos compartilhar conhecimento e experiências.
+
+:::
