@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 title: Nível 0 ao 3 - Onde ficamos? No nível 2!
 ---
 
@@ -266,10 +266,10 @@ def delete_user(id):
 Agora, vamos avaliar as rotas:
 
 - GET /users: Retorna todos os usuários cadastrados no banco de dados
-- GET /users/<int:id>: Retorna o usuário com o id informado
+- GET /users/`{int:id}`: Retorna o usuário com o id informado
 - POST /users: Cria um novo usuário
-- PUT /users/<int:id>: Atualiza o usuário com o id informado
-- DELETE /users/<int:id>: Deleta o usuário com o id informado
+- PUT /users/`{int:id}`: Atualiza o usuário com o id informado
+- DELETE /users/`{int:id}`: Deleta o usuário com o id informado
 
 Agora, vamos testar as rotas. Para isso, vamos executar o comando abaixo, dentro do diretório ***"src"***:
 

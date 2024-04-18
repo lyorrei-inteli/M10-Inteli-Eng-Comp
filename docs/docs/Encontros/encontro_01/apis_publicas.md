@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 5
 title: Atividade em Conjunto - Estudar APIs públicas famosas no que são REST para eles identificarem os pilares nelas
 ---
 
