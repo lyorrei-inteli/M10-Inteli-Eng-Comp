@@ -142,7 +142,7 @@ Para mais informações sobre o Insomnia, acesse a [documentação oficial](http
 
 ### APIs para Estudo
 
-Dentro do repositório (`public-apis`)[https://github.com/public-apis/public-apis] do Github, é possível ver uma série de APIs públicas que podem ser utilizadas para estudo. Vamos escolher algumas APIs para estudar e identificar os pilares REST presentes nelas.
+Dentro do repositório [`public-apis`](https://github.com/public-apis/public-apis) do Github, é possível ver uma série de APIs públicas que podem ser utilizadas para estudo. Vamos escolher algumas APIs para estudar e identificar os pilares REST presentes nelas.
 
 Cada equipe deve escolher uma ou duas APIs para estudar. A ideia é que, ao final, tenhamos uma boa quantidade de APIs estudadas e os pilares REST identificados em cada uma delas.
 
