@@ -36,7 +36,7 @@ Para os nossos testes para compreender o uso da ferramenta, vamos utilizar a API
 
 A tela inicial do Insomnia é a seguinte:
 
-<img src={useBaseUrl("/img/insomnia/tela_inicial_insomnia.png")} alt="Tela Inicial do Insomnia" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto' }} />
+<img src={useBaseUrl("/img/insomnia/tela_inicial_insomnia.png")} alt="Tela Inicial do Insomnia" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
 
 Primeiro vamos criar uma collection. Uma collection no Insomnia é um conjunto de requisições HTTP que são salvas juntas sob um mesmo agrupamento. Esta coleção pode incluir chamadas GET, POST, PUT, DELETE, entre outras, permitindo ao usuário testar diferentes endpoints de uma API de forma organizada. As collections podem ser usadas para agrupar requisições que fazem parte do mesmo projeto, teste ou cenário de uso.
 
@@ -87,5 +87,25 @@ Como resultado, vamos obter a seguinte tela:
 <img src={useBaseUrl("/img/insomnia/resultado_primeiro_request.png")} alt="Tela Inicial da Collection Criada" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
 
 Vamos criar agora um ambiente para armazenar variáveis de ambiente. O objetivo dele é permitir que diferentes valores possam ser atribuidos para variáveis e parâmetros. Ele permite também pegar o resultado de uma requisição e já colocar uma resposta obtida como um desses valores.Para isso, clique no botão `Manage Environments` e depois em `Add Environment`.
+
+Ao criar os `Environments`, você pode definir variáveis de ambiente que podem ser usadas em suas requisições. Isso é útil para alternar facilmente entre diferentes configurações de ambiente, como desenvolvimento, teste e produção. Eles podem ser públicos, onde todos os membros da equipe podem acessar, ou privados, onde apenas você pode acessar. Quando uma collection é compartilhada, os ambientes públicos também são compartilhados.
+
+<img src={useBaseUrl("/img/insomnia/criando-um-ambiente.png")} alt="Criando um ambiente" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Todo ambiente criado é salvo automaticamente e pode ser acessado a qualquer momento. Para alternar entre diferentes ambientes, basta selecionar o ambiente desejado no menu suspenso no canto superior direito da tela. Ele é criado utilizando um arquivo JSON, que pode ser exportado e importado para outros ambientes.
+
+Vamos configurar a variável `baseUrl` para a URL `https://deckofcardsapi.com/api/deck/`. Para isso, clique no botão `+` ao lado de `baseUrl` e insira o valor `https://deckofcardsapi.com/api/deck/`.
+
+```json
+{
+	"baseUrl":"https://deckofcardsapi.com/api/deck"
+}
+```
+
+Agora vamos utilizar essa variável para fazer uma nova requisição. Clique no botão `+` ao lado de `Filter` e selecione `HTTP Request`. Na URL, insira `{{baseUrl}}/new/shuffle/?deck_count=1`.
+
+<img src={useBaseUrl("/img/insomnia/utilizando-base-url.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Agora, vamos vincular essa requisição com uma variável de ambiente, para conseguir guardar 
 
 ### APIs para Estudo
