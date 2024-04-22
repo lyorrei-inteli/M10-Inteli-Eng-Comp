@@ -89,7 +89,67 @@ Vamos avaliar o que aconteceu aqui:
 2. O Docker Client entrou em contato com o Docker Daemon;
 3. O Docker Daemon procurou a imagem do `hello-world` e não encontrou. Ele baixou a imagem `hello-world` do Docker Hub;
 4. O Docker Daemon criou um novo container a partir da imagem baixada e executou o comando que produziu a saída que estamos lendo;
+5. O Docker Daemon enviou a saída para o Docker Client, que a enviou para o terminal.
 
+Esse foi o processo de execução de um container no Docker. Vamos continuar com a execução de containers no Docker.
+
+:::
+
+Um detalhe importante é que um container apenas é executado enquanto o processo que ele está executando estiver em execução. Quando o processo termina, o container é encerrado. Para executar um container em modo interativo, é necessário utilizar o comando `docker run -it ubuntu bash`. Vamos executar este comando no terminal.
+
+```sh
+docker run -it ubuntu bash
+```
+
+O que vai acontecer agora é que a imagem do Ubuntu será baixada e um container será criado. O terminal será alterado para o terminal do container. Vamos executar o comando `ls` para listar os arquivos do container.
+
+```sh
+ls
+```
+
+Repare que os arquivos listados são os arquivos do container. Vamos executar o comando `exit` para sair do container.
+
+```sh
+exit
+```
+
+Agora o container foi encerrado e o terminal voltou ao terminal do host. Porque isso aconteceu? Porque o processo que estava sendo executado no container foi encerrado. E qual era o processo? O processo era o terminal bash. Quando o terminal bash foi encerrado, o container foi encerrado.
+
+:::tip[O que aconteceu aqui?]
+
+> Mas Murilo, calma ai! Como vou saber quais containers estão em execução?
+
+<img src="https://pa1.aminoapps.com/6925/606ef81cfe6a33308600d6a7444a8527a78dca27r1-288-216_00.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom: '24px' }}/>
+
+Vamos verificar isso! Para verificar os containers em execução, é necessário executar o comando `docker container ps`. Vamos executar este comando no terminal.
+
+```sh
+docker container ps
+```
+
+Vamos obter a seguinte resposta:
+
+```sh
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
+Repare que temos os cabeçalhos das informações dos containers. Neste caso, não temos nenhum container em execução. Vamos executar o comando `docker container ps -a` para verificar todos os containers que foram executados.
+
+```sh
+docker container ps -a
+```
+
+Agora vamos obter a seguinte resposta:
+
+```sh
+CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                          PORTS     NAMES
+95def145d17a   ubuntu        "bash"     2 minutes ago    Exited (0) About a minute ago             boring_hugle
+20f0398d420f   hello-world   "/hello"   23 minutes ago   Exited (0) 23 minutes ago                 trusting_taussig
+```
+
+Agora pessoal, vamos ver algumas coisas importantes aqui. O comando `docker container ps -a` nos mostra todos os containers que foram executados. Repare que temos o `CONTAINER ID`, `IMAGE`, `COMMAND`, `CREATED`, `STATUS`, `PORTS` e `NAMES`. O `CONTAINER ID` é um identificador único para o container. O `IMAGE` é a imagem que foi utilizada para criar o container. O `COMMAND` é o comando que foi executado no container. O `CREATED` é o tempo que o container foi criado. O `STATUS` é o status atual do container. O `PORTS` são as portas que estão sendo utilizadas pelo container. O `NAMES` é o nome do container. Quando nenhum nome é atribuído ao container, o Docker atribui um nome aleatório.
+
+Vamos continuar estudando!
 
 :::
 
