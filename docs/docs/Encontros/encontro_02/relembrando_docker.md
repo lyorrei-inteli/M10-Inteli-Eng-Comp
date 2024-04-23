@@ -354,4 +354,264 @@ Agora vamos acessar o endereço `http://localhost:8080` no navegador. O Adminer 
 
 :::tip[O que é está acontecendo aqui?]
 
+<img src="https://64.media.tumblr.com/f575f13ebd2a66e30615c7c4115bc21c/tumblr_oboyc1iMXf1v6bs4yo1_500.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom: '24px' }}/>
+
+Vamos avaliar o que aconteceu aqui:
+
+1. O arquivo `docker-compose.yml` foi criado com as definições dos serviços `db` e `adminer`;
+2. Definimos a versão do Docker Compose;
+3. Definimos os serviços `db` e `adminer`;
+4. O serviço `db` utiliza a imagem do Postgres e define a senha do Postgres;
+5. Estabelecemos o comportamento de reinicialização do container. Quando definimos ele para `always`, o container será reiniciado sempre que ele for encerrado;
+6. Definimos o tamanho do shared memory limit para o container;
+7. O serviço `adminer` utiliza a imagem do Adminer e define a porta `8080` do host para a porta `8080` do container;
+8. O comando `docker-compose up -d` foi executado no terminal;
+9. O Docker Compose criou os containers `db` e `adminer` a partir das imagens do Postgres e do Adminer;
+10. O Adminer foi acessado no navegador.
+
+Aqui foi aberta a porta `8080` do host para a porta `8080` do container. 
+
 :::
+
+Agora como temos o acesso ao `Adminer`. O uusário padrão da imagem do Postgres é `postgres` e a senha é `example`. Vamos acessar o Adminer e vamos preencher os campos de conexão com o banco de dados.
+
+<img src={useBaseUrl("/img/docker-base/postgres-01.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Agora vamos verificar se conseguimos acessar o banco de dados utilizando uma aplicação externa. Podemos utilizar o DBeaver para acessar o banco de dados. Vamos acessar o DBeaver e vamos criar uma nova conexão com o banco de dados.
+
+:::danger[Atenção]
+
+ESSA ETAPA É APENAS PARA FAZER UMA DEMONSTRAÇÃO! NÃO É NECESSÁRIO FAZER ISSO!
+
+<img src="https://i.gifer.com/embedded/download/X2gn.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom: '24px' }}/>
+
+:::
+
+Vamos obter o seguinte erro:
+
+<img src={useBaseUrl("/img/docker-base/postgres-02.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+> Mas Murilo isso não faz sentido! O que aconteceu aqui? Nós estamos conectados com o banco de dados no Adminer, mas não conseguimos conectar com o banco de dados no DBeaver. O que aconteceu?
+
+O que aconteceu foi que o banco de dados está sendo executado em um container. O banco de dados está sendo executado em um container e a porta `5432` do host não está mapeada para a porta `5432` do container. Para acessar o banco de dados no DBeaver, é necessário mapear a porta `5432` do host para a porta `5432` do container. Vamos fazer isso alterando o nosso arquivo `docker-compose.yml`.
+
+```yml
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+```
+
+Vamos derrubar os containers e subir novamente.
+
+```sh
+docker-compose down
+docker-compose up -d
+```
+
+Agora podemos ver o resultado da tentativa de conexão com o DBeaver:
+
+<img src={useBaseUrl("/img/docker-base/postgres-03.png")} alt="Utilizando baseUrl" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Agora conseguimos acessar o banco de dados no DBeaver. O que aconteceu aqui foi que a porta `5432` do host foi mapeada para a porta `5432` do container. 
+
+Pessoal até aqui avançamos bastante no desenvolvimento utilizando Docker. Vamos continuar estudando mais sobre Docker e containers, mas agora limitando os recursos disponíveis para nossa aplicação.
+
+Primeiro vamos criar uma aplicação em Flask que conecta com nosso banco de dados Postgres. Nossa aplicação vai ser simples, ela vai enviar os dados que estamos recebendo para o banco e devolver todos os dados que estão no banco. Portanto ela possui apenas duas rotas.
+
+```python
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:example@db:5432/postgres'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_USERNAME'] = 'postgres'
+app.config['SQLALCHEMY_PASSWORD'] = 'example'
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+    def __repr__(self):
+        return '<User %r>' % self.name
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    name = request.json['name']
+    user = User(name=name)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'message': 'User created'}), 201
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([{'name': user.name, 'created_at': user.created_at} for user in users]), 200
+
+if __name__ == '__main__':
+      app.app_context().push()
+      db.create_all()
+      app.run(host='0.0.0.0', port=5000, threaded=False)
+```
+
+Vamos primeiro compreender o que nossa aplicação está fazendo:
+
+1. Estamos criando uma aplicação em Flask;
+2. Estamos configurando a conexão com o banco de dados Postgres;
+3. Configuramos a rota para conectar com o banco de dados e criar um usuário;
+4. Configuramos o SQLAlchemy para não rastrear as modificações;
+5. Estamos criando uma tabela `User` no banco de dados;
+6. Estamos criando duas rotas: uma para criar um usuário e outra para listar todos os usuários;
+7. Estamos criando um usuário no banco de dados quando a rota `POST /users` é acessada;
+8. Estamos listando todos os usuários do banco de dados quando a rota `GET /users` é acessada.
+
+Para nossa aplicação ser executada, é necessário instalar as dependências. Para instalar as dependências, é necessário criar um arquivo chamado `requirements.txt` com o seguinte conteúdo:
+
+```txt
+Flask==2.2
+Werkzeug==2.2.2
+Flask-SQLAlchemy==3.0.3
+psycopg2-binary==2.9.1
+```
+
+Agora vamos criar um arquivo chamado `Dockerfile` com o seguinte conteúdo:
+
+```Dockerfile
+FROM python:3.9-slim-buster
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["python", "app.py"]
+```
+
+Agora vamos construir o arquivo `docker-compose.yml` com o seguinte conteúdo:
+
+```yml
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+
+  app:
+    build: .
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+```
+
+Vamos agora iniciar o processo.
+
+```sh
+docker-compose up
+```
+
+Pessoal deixamos o console preso a aplicação para conseguirmos ver o que está acontecendo. Vamos utilizar o Insomnia para testar nossa aplicação. Vamos criar um novo usuário utilizando a rota `POST /users`. Podemos verificar o resultado da requisição e a inserção do usuário no banco de dados, verificando a rota `GET /users`.
+
+:::danger[Atenção]
+
+<img src="https://i.pinimg.com/originals/8b/30/e1/8b30e1297f11091203561dd1fe0ce5bb.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom: '24px' }}/>
+
+> Murilo, o que está acontecendo aqui?
+
+Pessoal vamos analisar por partes, fizemos bastante coisa aqui e temos várias coisas acontecendo ao mesmo tempo.
+
+1. Criamos uma aplicação em Flask que se conecta com o banco de dados Postgres;
+2. Configuramos a conexão com o banco de dados Postgres;
+3. Configuramos a rota para criar um usuário no banco de dados;
+4. Configuramos a rota para listar todos os usuários do banco de dados;
+5. Criamos um Dockerfile para construir a imagem da aplicação;
+6. Criamos um arquivo `requirements.txt` com as dependências da aplicação;
+7. Criamos um arquivo `docker-compose.yml` com as definições dos serviços `db` e `app`;
+8. Criamos um serviço `db` que utiliza a imagem do Postgres e mapeia a porta `5432` do host para a porta `5432` do container;
+9. Criamos um serviço `app` que constrói a imagem da aplicação e mapeia a porta `5000` do host para a porta `5000` do container;
+10. O Docker Compose criou os containers `db` e `app` a partir das imagens do Postgres e da aplicação;
+11. A aplicação foi executada no container `app`;
+12. A aplicação foi acessada no pelo Insomnia;
+13. Um usuário foi criado no banco de dados;
+14. O usuário foi listado no banco de dados.
+
+Nosso sistema neste momento está funcionando corretamente. Utilizando 2 containers, um para o banco de dados e outro para a aplicação. Vamos manter esse sistema ativo até o momento.
+
+:::
+
+Agora vamos estrangular nossa aplicação para ver o comportamento do sistema. Vamos limitar a quantidade de memória e cpu disponível para a aplicação. Vamos alterar o arquivo `docker-compose.yml` para limitar a quantidade de memória e cpu disponível para a aplicação.
+
+```yml
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+   resources:
+      limits:
+        cpus: '0.5'
+        memory: 128M
+
+  app:
+    build: .
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+```
+
+Agora vamos reiniciar os containers.
+
+```sh
+docker-compose down
+docker-compose up
+```
