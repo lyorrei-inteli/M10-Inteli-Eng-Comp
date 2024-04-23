@@ -592,7 +592,8 @@ services:
       POSTGRES_PASSWORD: example
    resources:
       limits:
-        cpus: '0.5'
+        # Segura que esse limite não está funcionando no nosso note
+        #cpus: '0.5'
         memory: 128M
 
   app:
@@ -605,7 +606,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          # Segura que esse limite não está funcionando no nosso note
+          #cpus: '0.5'
           memory: 128M
 ```
 
