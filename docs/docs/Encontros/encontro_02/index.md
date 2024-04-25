@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: Encontro 02 - Sistemas sincronos e assincronos e Distinção entre sistemas e bibliotecas assíncronas
+title: Encontro 02 - Sistemas síncronos e assíncronos
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
