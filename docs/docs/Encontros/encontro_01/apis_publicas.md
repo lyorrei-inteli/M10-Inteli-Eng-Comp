@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: Atividade em Conjunto - Estudar APIs públicas famosas no que são REST para eles identificarem os pilares nelas
+title: Atividade em Conjunto 
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
