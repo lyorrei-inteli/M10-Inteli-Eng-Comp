@@ -44,3 +44,15 @@ Já neste vídeo temos a configuração do emulador:
             width: '100%',
             height: '50vh',
         }} src="https://www.youtube.com/embed/gNYNvHUSW1s?si=nSfLzEiofUt_2Ubv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+### Observações na Instalação
+
+Pessoal depois de instalado o Android Studio, no momento que vamos escolher qual a versão do Android no menu `SDK Platforms`, vamos escolher a versão `Android 13.0 Tiramisu`. No meu `SDK Tools`, selecionar `Android SDK Command-line Tools (lastest)`, `Google Play services` e `Google Web Driver`. Selecionar a opção `Apply` e depois `OK`.
+
+Agora vamos configurar nosso dispositivo virtual. Ainda no menu `More Actions` do Android Studio, selecionar `Virtual Device Manager`. Vamos criar um novo dispositivo virtual, selecionando a opção `Create Virtual Device`. Vamos escolher a opção `Pixel 4` e a versão `Android 13.0 Tiramisu`. Vai ser necessário realizar o downlaod da imagem selecionada para prosseguir. Selecionar a opção `Next` e depois `Finish`.
+
+Depois de iniciado, é possível que o emulador leve um tempo BASTANTE GRANDE para iniciar. Basta aguardar e depois você já poderá utilizar o emulador!
+
+Depois, com o VS Code aberto, vamos instalar a extensão do Flutter. Para isso, vamos na aba de extensões e pesquisar por `Flutter`. Vamos instalar a extensão e depois vamos instalar a extensão do `Dart`.
+
+Pronto! Agora vocês estão prontos para começar a desenvolver nossas aplicações com o Flutter! Bons estudos e qualquer dúvida, estou a disposição!
