@@ -13,14 +13,13 @@ import TabItem from '@theme/TabItem';
 
 Pessoal vamos ter aqui a descrição da atividade ponderada e entrega parcial.
 
-A entrega parcial vai ocorrer hoje, dia 25/04/2024, até as 23:59. O que deve conter nela:
-- Sua aplicação sendo executada de forma assíncrona;
-- Sua aplicação sendo executada de forma síncrona.
+A entrega parcial vai ocorrer hoje, dia 26/04/2024, até as 23:59. O que deve conter nela:
+- Sua aplicação sendo executada de forma assíncrona ou síncrona, dockerizada.
 
 A atividade ponderada será entregue no dia 28/04/2024, até as 23:59. O que deve conter nela:
 - O conteúdo das entregas parciais;
-- O teste da aplicação utilizando o Insomnia;
-- O teste da aplicação utilizando os sistemas de carga apresentados durante a instrução;
-- Arquivos de configuração do ambiente utilizado (Dockerfiles e docker-compose.yml).
+- O teste da aplicação utilizando o Insomnia (aqui pode ser o teste de como as requisições se comportaram);
+- Arquivos de configuração do ambiente utilizado (Dockerfiles e docker-compose.yml);
+- Descrição do sistema com as instruções de execução e conclusões no arquivo README.md.
 
-A entrega final da atividade deve ser efetivada no Github, com o link do repositório sendo enviado no card do Adalove referente a atividade.
+A entrega parcial e a final da atividade devem ser efetivadas no Github, com o link do repositório sendo enviado no card do Adalove referente a atividade.
