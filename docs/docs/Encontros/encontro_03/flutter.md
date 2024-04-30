@@ -672,3 +672,5 @@ Pessoal bastante coisa mudou aqui, vamos avaliar algumas delas:
 Gente, falamos de BASTANTE coisa aqui! Vamos agora ver como o Flutter trabalha com o *hot reload* e como podemos utilizar isso para desenvolver nossos aplicativos de forma mais rápida e eficiente.
 
 Boa codificação para vocês! 💻🤖📱
+
+<img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cf207f31-d831-4ae4-bddb-3c93f061b34c/d9w7fob-20833e13-52c5-40cb-9222-2d4e68298e59.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NmMjA3ZjMxLWQ4MzEtNGFlNC1iZGRiLTNjOTNmMDYxYjM0Y1wvZDl3N2ZvYi0yMDgzM2UxMy01MmM1LTQwY2ItOTIyMi0yZDRlNjgyOThlNTkuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.GXBQKmgRiCBhpotUCwTOT37jDSLi_h7GLSK3lRO1jRE" alt="Arquitetura Sincrona" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
