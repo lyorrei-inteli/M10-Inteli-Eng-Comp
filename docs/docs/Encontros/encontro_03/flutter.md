@@ -248,3 +248,117 @@ Vamos avaliar agora o que aconteceu e como o nosso código gerou nosso aplicativ
     - `title`: é o título da tela.
 
 Agora que temos o nosso aplicativo rodando, vamos fazer algumas alterações para ver como o Flutter trabalha com o *hot reload*. Vamos alterar o título do aplicativo e vamos ver como o Flutter atualiza a interface do usuário sem precisar reiniciar o aplicativo. Vamos alterar o título do aplicativo para `Meu Primeiro App` e vamos ver o resultado.
+
+<img src="https://64.media.tumblr.com/8da1013538407144535de1803a82cf4d/tumblr_p5z64pm3Ga1tpvtc4o2_r2_500.gif" alt="Arquitetura Sincrona" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }} />
+
+Pessoal até aqui discultimos alguns conceitos básicos do Flutter. Vamos agora verificar como adicionar novos recursos ao nosso aplicativo.
+
+---
+
+### Adicionando recursos ao aplicativo
+
+Pessoal, vamos editar nosso aplicativo padrão para adicionar algumas funcionalidades nele:
+
+- Adicionar imagens (mídia) no app;
+- Adicionar um botão para mudar de tela;
+- Adicionar um campo de texto para o usuário digitar algo;
+- Adicionar um botão para enviar para realizar uma consulta a uma API.
+
+Primeiro, vamos editar a estrutura do nosso arquivo `lib/main.dart`:
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const MinhaPrimeiraTela(),
+    );
+  }
+}
+
+class MinhaPrimeiraTela extends StatelessWidget {
+  const MinhaPrimeiraTela({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Container();
+  }
+}
+```
+
+Pessoal repare que aqui, temos um novo widget chamado `MinhaPrimeiraTela`. Atualmente, ele está retornando um `Container`. Vamos alterar esse widget para retornar um `Scaffold` com uma imagem e um botão. Vamos alterar o código para o seguinte:
+
+```dart
+//Código anterior omitido
+
+class MinhaPrimeiraTela extends StatelessWidget {
+  const MinhaPrimeiraTela({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+      appBar: AppBar(
+        title: const Text('Minha primeira tela'),
+      ),
+      body: const Center(
+        child: Text('Olá, mundo!'),
+      ),
+    );
+  }
+}
+```
+O que fizemos de alteração aqui pessoal? Adicionamos um elemento estruturante na nossa aplicação, o `Scaffold`. O `Scaffold` é um widget que define a estrutura básica de uma tela. Ele possui várias propriedades que permitem personalizar a aparência da tela, como a barra superior, o corpo da tela e o botão flutuante. No nosso caso, estamos definindo a barra superior com o título `Minha primeira tela` e o corpo da tela com o texto `Olá, mundo!`.
+
+Pessoal como recurso de imagem, vamos utilizar duas fotos disponíveis no [pexels](https://www.pexels.com/pt-br/) e [unslapsh](https://unsplash.com/pt-br). Vamos utilizar elas da seguinte maneira:
+
+- Recurso online: https://images.pexels.com/photos/8364804/pexels-photo-8364804.jpeg
+- Recurso offline: https://unsplash.com/pt-br/fotografias/cao-branco-e-marrom-de-pelagem-curta-no-tapete-marrom-nvuzRUquElY
+
+Para adicionar a imagem vinda de uma URL, vamos utilizar o widget `Image.network`. Vamos adicionar a imagem no nosso aplicativo. Vamos alterar o código para o seguinte:
+
+```dart
+class MinhaPrimeiraTela extends StatelessWidget {
+  const MinhaPrimeiraTela({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+      appBar: AppBar(
+        title: const Text('Minha primeira tela'),
+      ),
+      body: Column(
+        children:  <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.network('https://images.pexels.com/photos/8364804/pexels-photo-8364804.jpeg',
+              width: 300,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      )
+    );
+  }
+}
+```
+
+Vamos avaliar o que fizemos aqui:
+
+- Adicionamos um novo widget `Column` para organizar os widgets em uma coluna. O `Column` é um widget que organiza os widgets em uma coluna vertical. Ele possui várias propriedades que permitem personalizar a aparência da coluna, como o alinhamento dos widgets e o espaçamento entre eles.
+- Adicionamos um novo widget `Padding` para adicionar um espaçamento ao redor da imagem. O `Padding` é um widget que adiciona um espaçamento ao redor de um widget filho. Ele possui várias propriedades que permitem personalizar o espaçamento, como a quantidade de espaçamento e a cor do espaçamento.
+- Adicionamos um novo widget `Image.network` para exibir a imagem. O `Image.network` é um widget que exibe uma imagem vinda de uma URL. Ele possui várias propriedades que permitem personalizar a aparência da imagem, como a largura, a altura e o ajuste da imagem.
+
