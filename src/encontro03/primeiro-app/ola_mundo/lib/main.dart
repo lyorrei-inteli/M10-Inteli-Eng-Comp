@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ola_mundo/segunda_tela.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,6 +40,18 @@ class MinhaPrimeiraTela extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset('assets/cao.jpg',
+              width: 300,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
+          ),
+          ElevatedButton(onPressed: 
+          (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MinhaSegundaTela()));
+          }, child: Text("Mudar de Tela")),
         ],
       )
     );
