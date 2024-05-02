@@ -58,3 +58,9 @@ Os sistemas monolíticos, nos quais o software é construído como uma única un
 7. ***Risco de falha do sistema***: Em sistemas monolíticos, uma falha em um componente pode afetar toda a aplicação, resultando em falhas completas do sistema, o que pode ser catastrófico para a continuidade dos negócios.
 
 8. ***Barreiras para novos desenvolvedores***: Para novos desenvolvedores, entender um sistema monolítico grande e complexo pode ser intimidador e demorado, o que pode retardar o processo de integração e contribuição efetiva ao projeto.
+
+---
+
+### Sugestão de Material
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/CsrHHHPHKwE?si=HlYsHe6YISOb2rFv" style={{ display: 'block', marginLeft: 'auto', maxHeight: '40vh', marginRight: 'auto', marginBottom:'24px' }}></iframe>
