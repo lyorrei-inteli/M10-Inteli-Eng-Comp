@@ -37,4 +37,10 @@ Para saber mais sobre o WSGI, acesse a [documentação oficial](https://www.pyth
 E para saber mais sobre o Gunicorn, acesse a [documentação oficial](https://gunicorn.org/) e sua implementação com o [Flask](https://flask.palletsprojects.com/en/3.0.x/deploying/gunicorn/).
 :::
 
-Você pode acessar o código fonte [aqui]().
+Você pode acessar o código fonte [aqui](https://github.com/Murilo-ZC/M10-Inteli-Eng-Comp/tree/main/src/encontro05/aplicacao02).
+
+#### Aplicação 3 - FastAPI com SQLite
+
+Agora pessoal, vamos para uma aplicação construída com o framework FastAPI. O FastAPI é um framework moderno e rápido para construir APIs web com Python 3.6+ baseado em anotações de tipo.
+
+Vamos utilizar a mesma base de código da aplicação 1, mas agora com o FastAPI. O link para o código fonte pode ser acessado [aqui](#).
