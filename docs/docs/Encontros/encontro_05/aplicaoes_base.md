@@ -21,4 +21,20 @@ Aqui temos um breve descritivo de cada uma das aplicações que serão testadas.
 
 Essa aplicação foi construída com o framework Flask e utiliza o banco de dados SQLite. Ela é uma aplicação simples que permite a criação de usuários e a listagem de todos os usuários cadastrados.
 
-O CRUD foi implementado utilizando a biblioteca `sqlite3` do Python e comandos SQL. A aplicação foi dockerizada e está pronta para ser executada. O link para ela pode ser visto [aqui]().
+O CRUD foi implementado utilizando a biblioteca `sqlite3` do Python e comandos SQL. A aplicação foi dockerizada e está pronta para ser executada. O link para ela pode ser visto [aqui](https://github.com/Murilo-ZC/M10-Inteli-Eng-Comp/tree/main/src/encontro05/aplicacao01).
+
+Um ponto importante para se observar, essa implementação foi deployada com o servidor built-in do Flask, o que não é recomendado para ambientes de produção.
+
+#### Aplicação 2 - Flask com SQLite e Servidor Gunicorn
+
+Está aplicação é igual a anterior, mas utilizando o servidor Gunicorn para servir a aplicação. O Gunicorn é um servidor HTTP WSGI para Python que é amplamente utilizado para servir aplicações web Python em produção.
+
+:::tip[WSGI]
+
+A Interface Gateway de Servidor Web (WSGI) é uma especificação para a comunicação entre servidores web e aplicações web Python. Ela define um contrato entre servidores web e aplicações web Python, permitindo que diferentes servidores web e aplicações web Python se comuniquem de forma eficiente.
+
+Para saber mais sobre o WSGI, acesse a [documentação oficial](https://www.python.org/dev/peps/pep-3333/).
+E para saber mais sobre o Gunicorn, acesse a [documentação oficial](https://gunicorn.org/) e sua implementação com o [Flask](https://flask.palletsprojects.com/en/3.0.x/deploying/gunicorn/).
+:::
+
+Você pode acessar o código fonte [aqui]().
