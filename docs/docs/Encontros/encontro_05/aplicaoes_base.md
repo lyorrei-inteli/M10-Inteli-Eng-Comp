@@ -43,4 +43,16 @@ Você pode acessar o código fonte [aqui](https://github.com/Murilo-ZC/M10-Intel
 
 Agora pessoal, vamos para uma aplicação construída com o framework FastAPI. O FastAPI é um framework moderno e rápido para construir APIs web com Python 3.6+ baseado em anotações de tipo.
 
-Vamos utilizar a mesma base de código da aplicação 1, mas agora com o FastAPI. O link para o código fonte pode ser acessado [aqui](#).
+Vamos utilizar a mesma base de código da aplicação 1, mas agora com o FastAPI. O link para o código fonte pode ser acessado [aqui](https://github.com/Murilo-ZC/M10-Inteli-Eng-Comp/tree/main/src/encontro05/aplicacao03).
+
+## Considerações 
+
+Pessoal ainda podemos criar diferentes aplicações para testar. Essas são apenas algumas aplicações base que utilizam diferentes frameworks de Python.
+
+:::danger[IMPORTANTE]
+
+Pessoal, repare que, mesmo com frameworks diferentes, as aplicações tem as demais características iguais. Isso é proposital para que possamos avaliar o desempenho de cada framework. Quando iniciarmos as trocas de pontos das tecnologias, devemos lembrar que elas podem impactar na performance da aplicação.
+
+Se estamos comparando apenas os frameworks, devemos manter as demais características iguais.
+
+:::
