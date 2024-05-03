@@ -45,6 +45,21 @@ Agora pessoal, vamos para uma aplicação construída com o framework FastAPI. O
 
 Vamos utilizar a mesma base de código da aplicação 1, mas agora com o FastAPI. O link para o código fonte pode ser acessado [aqui](https://github.com/Murilo-ZC/M10-Inteli-Eng-Comp/tree/main/src/encontro05/aplicacao03).
 
+:::tip[Uvicorn vs Gunicorn]
+
+O Uvicorn é um servidor ASGI que é amplamente utilizado para servir aplicações web Python em produção. Ele é o servidor recomendado para servir aplicações FastAPI. Já o Gunicorn é um servidor WSGI que é amplamente utilizado para servir aplicações web Python em produção. Ele é o servidor recomendado para servir aplicações Flask.
+
+:::
+
+:::tip[ASGI]
+
+A Interface Gateway de Servidor Assíncrono (ASGI) é uma especificação para a comunicação entre servidores web e aplicativos web Python assíncronos. Ela define um contrato entre servidores web e aplicativos web Python assíncronos, permitindo que diferentes servidores web e aplicativos web Python assíncronos se comuniquem de forma eficiente.
+
+Para saber mais sobre o ASGI, acesse a [documentação oficial](https://asgi.readthedocs.io/en/latest/).
+E para saber mais sobre o Uvicorn, acesse a [documentação oficial](https://www.uvicorn.org/).
+
+:::
+
 ## Considerações 
 
 Pessoal ainda podemos criar diferentes aplicações para testar. Essas são apenas algumas aplicações base que utilizam diferentes frameworks de Python.
