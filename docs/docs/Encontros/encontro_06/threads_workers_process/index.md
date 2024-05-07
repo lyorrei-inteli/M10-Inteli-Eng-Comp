@@ -50,3 +50,19 @@ A execução de uma tarefa por um sistema operacional é um processo que envolve
    Uma tarefa é concluída quando a thread principal do processo termina sua execução, seja terminando naturalmente após executar todas as suas instruções, seja por ser terminada por uma chamada de sistema ou devido a um erro. Quando uma tarefa termina, o sistema operacional limpa os recursos usados, fecha handles de arquivo e libera a memória utilizada pelo processo.
 
 Essas etapas compõem o ciclo de vida básico de uma tarefa em um sistema operacional, permitindo que os computadores executem múltiplas tarefas de forma eficiente e controlada.
+
+### Paralelismo e Concorrência
+
+O paralelismo e a concorrência são conceitos fundamentais em sistemas operacionais e programação de computadores. Eles descrevem a capacidade de um sistema de executar múltiplas tarefas simultaneamente e de forma eficiente.
+
+- **Paralelismo**:
+  O paralelismo refere-se à capacidade de um sistema de executar múltiplas tarefas ao mesmo tempo, aproveitando os recursos de hardware disponíveis. Isso pode ser feito em sistemas com múltiplos núcleos de processamento, onde cada núcleo pode executar uma tarefa separada de forma independente.
+
+
+- **Concorrência**:
+   A concorrência refere-se à capacidade de um sistema de gerenciar múltiplas tarefas de forma eficiente, mesmo que elas não sejam executadas simultaneamente. Isso pode ser feito através de técnicas como multitarefa, multithreading e programação assíncrona, que permitem que várias tarefas sejam executadas de forma concorrente, alternando rapidamente entre elas.
+
+
+<img src="https://miro.medium.com/v2/resize:fit:962/format:webp/0*gNXjJonOTkqPDaIw.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '60vh', marginRight: 'auto', marginBottom: '24px' }}/>
+
+<img src="https://miro.medium.com/v2/resize:fit:962/format:webp/1*o9s_kvTIVFbP8NanzqvBsA.gif" style={{ display: 'block', marginLeft: 'auto', maxHeight: '60vh', marginRight: 'auto', marginBottom: '24px' }}/>
