@@ -335,8 +335,8 @@ def send_message_rabbitmq(msg: Message):
         , '/'
         , credentials))
     channel = connection.channel()
-    channel.queue_declare(queue=os.environ["RABBITMQ_QUEUE"], durable=True)
-    channel.basic_publish(exchange='', routing_key='messages', body=f"{msg.date} - {msg.msg}")
+    channel.queue_declare(queue=os.environ["RABBITMQ_QUEUE"])
+    channel.basic_publish(exchange='', routing_key=os.environ["RABBITMQ_QUEUE"], body=f"{msg.date} - {msg.msg}")
     connection.close()
 
 @app.post("/ping")
@@ -370,3 +370,333 @@ Vamos agora configurar o `Service02` para receber as mensagens do RabbitMQ e arm
 
 #### Adicionando o Service02
 
+Agora vamos construir nosso segundo serviço. Vamos criar a estrutura de pastas para o `Service02` e adicionar o arquivo `app.py`. Os arquivos `Dockerfile` e `requirements.txt` serão os mesmos do `Service01`. Vamos criar o arquivo `app.py` dentro da pasta `Service02` com o seguinte conteúdo:
+
+```python
+# Serviço 2 - recebe as mensagens via RabbitMQ e as armazena em um banco de dados em memória
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+from datetime import datetime
+import pika
+import os
+
+app = FastAPI()
+banco_em_memoria = []
+
+class Message(BaseModel):
+    date: datetime = None
+    msg: str
+
+# Cria uma função que recebe as mensagens para o RabbitMQ
+def receive_message_rabbitmq():
+    # Verifica se as variáveis de ambiente estão definidas
+    if "RABBITMQ_HOST" not in os.environ or "RABBITMQ_PORT" not in os.environ:
+        raise Exception("RABBITMQ_HOST and RABBITMQ_PORT must be defined in environment variables")
+
+    credentials = pika.PlainCredentials(os.environ["RABBITMQ_DEFAULT_USER"], os.environ["RABBITMQ_DEFAULT_PASS"])
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        os.environ["RABBITMQ_HOST"]
+        , os.environ["RABBITMQ_PORT"]
+        , '/'
+        , credentials))
+    channel = connection.channel()
+    channel.queue_declare(queue=os.environ["RABBITMQ_QUEUE"], durable=True)
+    channel.basic_consume(queue=os.environ["RABBITMQ_QUEUE"], on_message_callback=callback, auto_ack=True)
+    channel.start_consuming()
+
+def callback(ch, method, properties, body):
+    print(f" [x] Received {body}")
+    banco_em_memoria.append(body)
+
+@app.get("/messages")
+async def get_messages():
+    return banco_em_memoria
+
+# Executa a aplicação com a informação de HOST e PORTA enviados por argumentos
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    print(os.environ)
+    if "SERVICE_02_HOST" in os.environ and "SERVICE_02_PORT" in os.environ:
+        receive_message_rabbitmq()
+        uvicorn.run(app, host=os.environ["SERVICE_02_HOST"], port=os.environ["SERVICE_02_PORT"])
+    else:
+        raise Exception("HOST and PORT must be defined in environment variables")
+
+```
+
+Agora vamos compreender o que está acontecendo aqui:
+
+- Criamos uma aplicação `FastAPI` que possui um endpoint `/messages` que retorna a lista de mensagens armazenadas em um banco de dados em memória.
+- Criamos uma lista `banco_em_memoria` que armazena as mensagens recebidas do RabbitMQ.
+- Criamos uma função `receive_message_rabbitmq` que recebe as mensagens do RabbitMQ e armazena no banco de dados em memória.
+- Criamos uma função `callback` que é chamada quando uma mensagem é recebida do RabbitMQ. Essa função adiciona a mensagem no banco de dados em memória.
+- Criamos um endpoint `/messages` que retorna a lista de mensagens armazenadas no banco de dados em memória.
+
+Agora vamos ajustar o arquivo `.env` para adicionar as variáveis de ambiente do `Service02`:
+
+```env
+# Configurações do Service01
+
+SERVICE_01_HOST=0.0.0.0
+SERVICE_01_PORT=8001
+SERVICE01_HOST_PORT=8000
+
+# Configurando o RabbitMQ
+
+RABBITMQ_DEFAULT_USER=inteli
+RABBITMQ_DEFAULT_PASS=inteli_secret
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+RABBITMQ_QUEUE=mensagens_async
+
+# Configurações do Service02
+
+SERVICE_02_HOST=0.0.0.0
+SERVICE_02_PORT=8000
+SERVICE02_HOST_PORT=8002
+```
+
+Agora vamos adicionar o serviço `service02` no nosso arquivo `docker-compose.yml`:
+
+```yaml
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  service01:
+    build:
+      context: ./Service01
+    ports:
+      - "${SERVICE01_HOST_PORT}:${SERVICE_01_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.12.14-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+
+  service02:
+    build:
+      context: ./Service02
+    ports:
+      - "${SERVICE02_HOST_PORT}:${SERVICE_02_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+```
+
+Pronto, agora temos o nosso `Service02` implementado e configurado no `docker-compose`. Vamos testar se a comunicação entre o `Service01` e o `Service02` está funcionando corretamente. Para isso, vamos iniciar o RabbitMQ, o Service01 e o Service02 com o comando `docker-compose up`. Em seguida, vamos acessar o endpoint `/ping` do Service01 para enviar uma mensagem para o RabbitMQ. Por fim, vamos acessar o endpoint `/messages` do Service02 para verificar se a mensagem foi armazenada corretamente.
+
+Espera um pouco, temos um problema aqui. O `Service02` não está recebendo as mensagens do RabbitMQ. Isso ocorre porque o `Service02` não está executando a função `receive_message_rabbitmq`. Para corrigir isso, vamos modificar o arquivo `app.py` do `Service02` para executar a função `receive_message_rabbitmq` quando o serviço for iniciado.
+
+Massss antes de continuarmos, vamos entender o que está acontecendo. A biblioteca `pika` é uma biblioteca síncrona, ou seja, ela bloqueia a execução do programa enquanto aguarda a chegada de mensagens. Para resolver esse problema, precisamos utilizar algum recurso que permita a execução da função `receive_message_rabbitmq` em ***PARALELO*** com a execução da aplicação. Eles precisam compartilhar o mesmo contexto de execução, mas precisam ser executados em ***PARALELO***.
+
+Mesmo processo, execução em paralelo, lembra algo? Em especial algo que falamos que se inicia com a letra ***T***. Sim, sim, sim, ***THREADS***. Vamos utilizar ***THREADS*** para executar a função `receive_message_rabbitmq` em ***PARALELO*** com a execução da aplicação.
+
+Vamos alterar o código do nosso `Service02` para adicionar a execução da função `receive_message_rabbitmq` em ***THREADS***:
+
+```python
+# Serviço 2 - recebe as mensagens via RabbitMQ e as armazena em um banco de dados em memória
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+from datetime import datetime
+import threading
+import pika
+import os
+# Ajuste para tentar reconectar ao RabbitMQ
+from pika.connection import Parameters
+Parameters.DEFAULT_CONNECTION_ATTEMPTS = 10
+
+
+
+app = FastAPI()
+banco_em_memoria = []
+
+class Message(BaseModel):
+    date: datetime = None
+    msg: str
+
+# Função de callback utilizada
+def callback(ch, method, properties, body):
+    print(f" [x] Received {body}")
+    banco_em_memoria.append(body)
+
+# Cria uma função que recebe as mensagens para o RabbitMQ
+def receive_message_rabbitmq():
+    # Verifica se as variáveis de ambiente estão definidas
+    if "RABBITMQ_HOST" not in os.environ or "RABBITMQ_PORT" not in os.environ:
+        raise Exception("RABBITMQ_HOST and RABBITMQ_PORT must be defined in environment variables")
+
+    credentials = pika.PlainCredentials(os.environ["RABBITMQ_DEFAULT_USER"], os.environ["RABBITMQ_DEFAULT_PASS"])
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        os.environ["RABBITMQ_HOST"]
+        , os.environ["RABBITMQ_PORT"]
+        , '/'
+        , credentials))
+    channel = connection.channel()
+    channel.queue_declare(queue=os.environ["RABBITMQ_QUEUE"])
+    channel.basic_consume(queue=os.environ["RABBITMQ_QUEUE"], on_message_callback=callback)
+    channel.start_consuming()
+
+
+@app.get("/messages")
+async def get_messages():
+    return banco_em_memoria
+
+# Executa a aplicação com a informação de HOST e PORTA enviados por argumentos
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    print(os.environ)
+    if "SERVICE_02_HOST" in os.environ and "SERVICE_02_PORT" in os.environ:
+        try:    
+            # Cria uma thread para receber as mensagens do RabbitMQ
+            thread = threading.Thread(target=receive_message_rabbitmq)
+            thread.start()
+            uvicorn.run(app, host=os.environ["SERVICE_02_HOST"], port=os.environ["SERVICE_02_PORT"])
+        except Exception as e:
+            print(f"Finalizando a execução da thread: {e}")
+            thread.stop()
+    else:
+        raise Exception("HOST and PORT must be defined in environment variables")
+
+
+```
+
+Pessoal agora sim, temos o nosso `Service02` recebendo as mensagens do RabbitMQ e armazenando em um banco de dados em memória. Vamos testar se a comunicação entre o `Service01` e o `Service02` está funcionando corretamente. Para isso, vamos iniciar o RabbitMQ, o Service01 e o Service02 com o comando `docker-compose up`. Em seguida, vamos acessar o endpoint `/ping` do Service01 para enviar uma mensagem para o RabbitMQ. Por fim, vamos acessar o endpoint `/messages` do Service02 para verificar se a mensagem foi armazenada corretamente.
+
+Aeeee temos quase tudo completo agora:
+
+- [ ] Ter o ***Nginx*** instalado e configurado para encaminhar as requisições para o `Service01` e para o `Service02`.
+- [x] Ter o ***RabbitMQ*** instalado e configurado para receber as mensagens do `Service01` e encaminhar para o `Service02`.
+- [x] Ter o `Service01` implementado para receber as requisições do `gateway` e encaminhar para o `RabbitMQ`.
+- [x] Ter o `Service02` implementado para receber as mensagens do `RabbitMQ` e armazenar em um banco de dados em memória.
+
+Vamos lá pessoal só mais um pouco!!
+Vamos adicionar o ***Nginx*** para encaminhar as requisições para o `Service01` e para o `Service02`.
+
+#### Adicionando o Nginx
+
+Vamos utilizar a imagem oficial do Nginx, disponível no [DockerHub](https://hub.docker.com/_/nginx). Essa imagem vai ser adicionada no nosso arquivo `docker-compose.yml` para que o `docker-compose` possa baixar e executar o Nginx. Além disso, vamos configurar o Nginx para encaminhar as requisições para o `Service01` e para o `Service02`.
+
+Primeiro vamos ajustar nosso arquivo de `nginx.conf` para configurar o Nginx para encaminhar as requisições para o `Service01` e para o `Service02`. Vamos criar o arquivo `nginx.conf` dentro da pasta `nginx` com o seguinte conteúdo:
+
+```nginx
+# gateway/nginx.conf
+
+worker_processes 1;
+
+events { worker_connections 1024; }
+
+http {
+    sendfile on;
+
+    upstream Service01 {
+        server Service01:8001;
+    }
+
+    upstream Service02 {
+        server Service02:8002;
+    }
+
+
+    server {
+        listen 80;
+
+        location /ping {
+            proxy_pass http://Service01;
+        }
+
+        location /messages {
+            proxy_pass http://Service02;
+        }
+
+    }
+}
+```
+
+Observem o que está acontecendo aqui:
+
+- Definimos o número de processos do Nginx como 1.
+- Definimos o número de conexões por processo como 1024.
+- Configuramos o Nginx para encaminhar as requisições para o `Service01` na porta 8001.
+- Configuramos o Nginx para encaminhar as requisições para o `Service02` na porta 8002.
+- Criamos um servidor que escuta na porta 80.
+- Configuramos o Nginx para encaminhar as requisições para o `Service01` no endpoint `/ping`.
+- Configuramos o Nginx para encaminhar as requisições para o `Service02` no endpoint `/messages`.
+
+Agora vamos ajustar o arquivo `docker-compose.yml` para adicionar o serviço `nginx`:
+
+```yaml
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  service01:
+    build:
+      context: ./Service01
+    ports:
+      - "${SERVICE01_HOST_PORT}:${SERVICE_01_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+
+
+  rabbitmq:
+    image: rabbitmq:3.12.14-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+
+
+  service02:
+    build:
+      context: ./Service02
+    ports:
+      - "${SERVICE02_HOST_PORT}:${SERVICE_02_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+
+  gateway:
+    build: ./nginx
+    ports:
+      - "8000:80"
+```
+
+Agora pessoal, para subir nossa aplicação, vamos executar o comando `docker-compose up`. Em seguida, vamos acessar o endpoint `/ping` do Nginx para enviar uma mensagem para o RabbitMQ. Por fim, vamos acessar o endpoint `/messages` do Nginx para verificar se a mensagem foi armazenada corretamente.
+
+Enfim!!! Temos nosso sistema funcionando 🐨🐳!! Parabéns a todos que chegaram até aqui. Agora, vamos comemorar e descansar um pouco.
+
+Pessoal, eu queria muito me vangloriar e dizer que nós estudamos o comportamento das Threads para utilizar exatamente aqui, quando precisamos delas. Contudo, eu não fiz isso de forma proposital. 
+
+Contudo, queria chamar a atenção de vocês para a importância de compreender alguns comportamentos e conceitos que são base para a construção das nossas soluções. A utilização de Threads é um desses conceitos que são muito importantes para a construção de sistemas distribuídos e escaláveis. Então, não deixem de estudar e compreender esses conceitos, pois eles são fundamentais para a construção de sistemas robustos e escaláveis.
+
+Gostaria de deixar como pensamento final para vocês:
+
+```quote
+“A wildfire destroys everything in its path. 
+It will be the same with your powers unless you learn to control them.” 
+— Giovanni
+```
+
+<img src="https://blogger.googleusercontent.com/img/a/AVvXsEgd6-b9tfTF0rXsofi5GG4f2nJvkZyWijBxKtTA8bSxOHNjgPY-vH3TsSSPKP-iRlrEOz2N_penVxMN0s7ImUTPEJ9D9ivnUnvpfzu4fAYZ-iLZvO4E2_IESZ4rodtgIKnCIlHovso7vtsCYup_4RHPWnTlMASK5XWNL9j3YNw3nJNpXLptdrpC7WpD=w1600" style={{ display: 'block', marginLeft: 'auto', maxHeight: '65vh', marginRight: 'auto', marginBottom: '24px' }}/>

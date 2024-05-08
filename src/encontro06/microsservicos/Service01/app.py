@@ -26,8 +26,8 @@ def send_message_rabbitmq(msg: Message):
         , '/'
         , credentials))
     channel = connection.channel()
-    channel.queue_declare(queue=os.environ["RABBITMQ_QUEUE"], durable=True)
-    channel.basic_publish(exchange='', routing_key='messages', body=f"{msg.date} - {msg.msg}")
+    channel.queue_declare(queue=os.environ["RABBITMQ_QUEUE"])
+    channel.basic_publish(exchange='', routing_key=os.environ["RABBITMQ_QUEUE"], body=f"{msg.date} - {msg.msg}")
     connection.close()
 
 @app.post("/ping")
