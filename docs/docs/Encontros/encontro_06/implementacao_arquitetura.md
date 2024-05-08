@@ -26,7 +26,7 @@ Pessoal eu vou tentar ao máximo descrever todos os passos para realizarmos a im
 
 ---
 
-### Arquitetura 01 - Comunicação Assíncrona com RabbitMQ
+## Arquitetura 01 - Comunicação Assíncrona com RabbitMQ
 
 Pessoal, para iniciarmos nosso estudo, vamos implementar um sistema como descrito na imagem abaixo:
 
@@ -39,7 +39,7 @@ O que está acontecendo aqui:
 - Temos o nosso `Service02`, que é responsável por receber as mensagens do `RabbitMQ` e armazenar em um banco de dados em memória (isso mesmo é só uma lista de objetos em memória). Ele disponibiliza um endpoint `/pong` que recebe as requisições do tipo `GET` para retornar a lista de mensagens armazenadas.
 - Por fim, temos nosso broker de mensagens, o `RabbitMQ`, que é responsável por receber as mensagens do `Service01` e encaminhar para o `Service02`.
 
-#### Verificando os requisitos
+### Verificando os requisitos
 
 Legal, agora que falamos como nossa arquitetura funciona, vamos verificar os requisitos para implementar ela:
 
@@ -76,7 +76,7 @@ Não precisamos já criar toda nossa estrutura de arquivos. Vamos implementando 
 
 :::
 
-#### Adicionando o Service01 e o docker-compose
+### Adicionando o Service01 e o docker-compose
 
 Vamos iniciar implementando o nosso `Service01`, o `RabbitMQ` e o docker-compose que vai ligar esses dois. Como só temos parte da nossa estrutura, vamos ver como ficou nossa estrutura de pastas:
 
@@ -224,7 +224,7 @@ Então, não se preocupem se vocês não conseguirem implementar de primeira. O 
 
 Beleza, mas agora vamos lá, ainda não devemos comemorar!! Faltam muitas coisas aqui para terminarmos nosso primeiro passo! Vamos adicionar o RabbitMQ nessa brincadeira!
 
-#### Adicionando o RabbitMQ
+### Adicionando o RabbitMQ
 
 Vamos utilizar a imagem oficial do RabbitMQ, disponível no [DockerHub](https://hub.docker.com/_/rabbitmq). Essa imagem vai ser adicionada no nosso arquivo `docker-compose.yml` para que o `docker-compose` possa baixar e executar o RabbitMQ. Além disso, vamos configurar dentro do nosso arquivo de `.env` uma variável para definir o nosso usuário e a senha do RabbitMQ.
 
@@ -282,7 +282,7 @@ Outro ponto importante, o `env_file` no serviço `service01` indica que as vari�
 
 E boa!!! Temos nosso RabbitMQ funcionando, mas ainda não temos a comunicação entre o Service01 e o RabbitMQ. Vamos implementar essa comunicação agora!
 
-#### Comunicação entre Service01 e RabbitMQ
+### Comunicação entre Service01 e RabbitMQ
 
 Para enviar mensagens para o RabbitMQ, vamos utilizar a biblioteca `pika`. Essa biblioteca é uma implementação do protocolo AMQP (Advanced Message Queuing Protocol) para Python. Com o `pika`, podemos enviar e receber mensagens do RabbitMQ de forma assíncrona. Mais informações sobre a biblioteca, podemos acessar a [documentação oficial](https://pika.readthedocs.io/en/stable/).
 
@@ -368,7 +368,7 @@ Estamos avançando!! Como está nosso estado atual:
 
 Vamos agora configurar o `Service02` para receber as mensagens do RabbitMQ e armazenar em um banco de dados em memória.
 
-#### Adicionando o Service02
+### Adicionando o Service02
 
 Agora vamos construir nosso segundo serviço. Vamos criar a estrutura de pastas para o `Service02` e adicionar o arquivo `app.py`. Os arquivos `Dockerfile` e `requirements.txt` serão os mesmos do `Service01`. Vamos criar o arquivo `app.py` dentro da pasta `Service02` com o seguinte conteúdo:
 
@@ -587,7 +587,7 @@ Aeeee temos quase tudo completo agora:
 Vamos lá pessoal só mais um pouco!!
 Vamos adicionar o ***Nginx*** para encaminhar as requisições para o `Service01` e para o `Service02`.
 
-#### Adicionando o Nginx
+### Adicionando o Nginx
 
 Vamos utilizar a imagem oficial do Nginx, disponível no [DockerHub](https://hub.docker.com/_/nginx). Essa imagem vai ser adicionada no nosso arquivo `docker-compose.yml` para que o `docker-compose` possa baixar e executar o Nginx. Além disso, vamos configurar o Nginx para encaminhar as requisições para o `Service01` e para o `Service02`.
 
