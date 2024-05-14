@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx_carrinho/controllers/cart_controller.dart';
 import 'package:mobx_carrinho/controllers/product_controller.dart';
-import 'package:mobx_carrinho/models/product.dart';
+import 'package:mobx_carrinho/models/product_model.dart';
 
 class ProductView extends StatelessWidget {
   final ProductController productController;
